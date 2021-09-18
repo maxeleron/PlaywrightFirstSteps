@@ -1,27 +1,20 @@
 const { test, expect } = require('@playwright/test');
 
-// third test
-// 
-test('third test', async ({ page }) => {
-    // Go to page of phone "Samsung Galaxy M32"
+test('User can perform global search', async ({ page }) => {
+    // Go to main page
     await page.goto('https://rozetka.com.ua/');
-    // Text input
-    await page.fill('rz-header input', 'Xiomi');
-
+    // Input search text
+    await page.fill('rz-header input', 'xiaomi');
+    // Click "Search" ("Найти") button
     await page.click('rz-header form > button');
-
+    // Wait for tiles appear after search
     await page.waitForSelector('.goods-tile');
 
-    const goodsTiles = await page.$$('.goods-tile__title');
+    // Get all elements at search results page
+    const goodsTiles = await page.locator('.goods-tile__title');
+    // Get text from search results
+    const allGoodsText = await goodsTiles.allInnerTexts();
 
-    // let firstElm = await page.locator(goodsTiles[0]);
-    await expect(goodsTiles[0].textContent()).toStrictEqual('some');
-    // await expect(firstElm.textContent()).toStrictEqual('some');
-
-    // goodsTiles.map(async(item) => await expect(item).toHaveText('Xiomi'));
-    // const se = page.locator('.product__buy .buy-button');
-    // const buyCreditButton = page.locator('.product__credit .button--large');
-
-    // await expect(buyButton).toHaveCSS('background-color', 'rgb(0, 160, 70)');
-    // await expect(buyCreditButton).toHaveCSS('background-color', 'rgb(62, 119, 170)');
+    // Assertion to check all elements after searching containing searched text
+    allGoodsText.map(async(item) => await expect(item.toLocaleLowerCase()).toContain('xiaomi'));
   });
