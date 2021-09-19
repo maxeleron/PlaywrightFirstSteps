@@ -1,13 +1,22 @@
 const { test, expect } = require('@playwright/test');
+// const { MainPage } = require('../models/MainPage');
+const { ShoppingPage } = require('../models/ShoppingPage');
+const { TestColors } = require('../testData/TestColors');
 
 // Assertion for element color
 test('Buy buttons have correct color', async ({ page }) => {
+    // Page Object variables
+    const shoppingPage = new ShoppingPage(page);
+    const testColors = new TestColors();
+
     // Go to page of phone "Samsung Galaxy M32"
-    await page.goto('https://rozetka.com.ua/samsung-sm-m325fzkgsek/p306669293/');
-    const buyButton = page.locator('.product__buy .buy-button');
-    const buyCreditButton = page.locator('.product__credit .button--large');
+    await shoppingPage.openSamsungGalaxyM32();
+
+    
+    const buyButton = await shoppingPage.buyButton;
+    const buyCreditButton = await shoppingPage.buyCreditButton;
 
     // Assertion to check buttons color is correct
-    await expect(buyButton).toHaveCSS('background-color', 'rgb(0, 160, 70)');
-    await expect(buyCreditButton).toHaveCSS('background-color', 'rgb(62, 119, 170)');
+    await expect(buyButton).toHaveCSS('background-color', testColors.green);
+    await expect(buyCreditButton).toHaveCSS('background-color', testColors.navy);
   });
