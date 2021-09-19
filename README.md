@@ -2,9 +2,9 @@
 This project is created as an assessment aim (to claim AQA J3)
 
 ## Installation of the project
-### Installation of Playwright
+### 1) install of Playwright
 __npm i -D @playwright/test__
-### install supported browsers
+### 2) install supported browsers
 __npx playwright install__
 
 # Different runs (you can also find them in package.json scripts)
