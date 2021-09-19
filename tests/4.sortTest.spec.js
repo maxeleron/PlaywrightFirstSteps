@@ -1,36 +1,50 @@
 const { test, expect } = require('@playwright/test');
+const { MainPage } = require('../models/MainPage');
+const { GoodsPage } = require('../models/GoodsPage');
+const { TestSort } = require('../testData/TestSort');
+const { TestStrings } = require('../testData/TestStrings');
 
 test('User can sort elements', async ({ page }) => {
-    // Go to main page
-    await page.goto('https://rozetka.com.ua/');
+    // Page Object variables
+    const mainPage = new MainPage(page);
+    const goodsPage = new GoodsPage(page);
+    const testSort = new TestSort();
+    const testStrings = new TestStrings();
+
+    // Open new page - rozetka.com.ua
+    await mainPage.open();
 
     // Open Catalogue ("Каталог")
-    await page.click('#fat-menu');
+    await page.click( mainPage.catalogueButton );
 
     // The user clicks 'Ноутбуки и компьютеры' section
-    // await page.waitForSelector('text=Ноутбуки и компьютеры');
     await page.click('text=Ноутбуки и компьютеры');
 
-    // 
-    await page.click('[title="Мониторы"]');
+    // Select Laptop category
+    await page.click('[title="Ноутбуки"]');
 
-    // Sort only
-    // Sort by brand (Dell)
-    await page.waitForSelector('[for="Dell"]');
-    await page.click('[for="Dell"]');
+    // Sort by brand Lenovo
+    await goodsPage.sortGoods( testSort.lenovo );
 
-    // Select "P" series
-    await page.waitForSelector('[for="P"]');
-    await page.click('[for="P"]');
+    // Sort by CPU: AMD Ryzen 5
+    await goodsPage.sortGoods( testSort.amdRyzen5 );
 
-    // Select 24" - 24.9" diagonal
-    await page.waitForSelector(`[for='24" - 24.9"']`);
-    await page.click(`[for='24" - 24.9"']`);
+    // Sort by RAM: 16-24gb
+    await goodsPage.sortGoods( testSort.ram16_24gb );
+
+    // Sort by SSD: 256gb
+    await goodsPage.sortGoods( testSort.ssd256gb );
+
+    // Select only avaliable laptops
+    await goodsPage.sortGoods( testSort.avaliable );
+
+    // Select 16"-17" diagonal
+    await goodsPage.sortGoods( testSort.display16_17 );
 
     // Wait for sort applied
-    await page.waitForSelector('.goods-tile__heading');
+    await page.waitForSelector( goodsPage.goodsTileTitle );
 
     // Assertion to check that sorting applied correctly
-    const title = await page.locator('.goods-tile__heading').textContent();
-    await expect(title.trim()).toStrictEqual('Монитор 24.1" Dell P2421 Black (210-AWLE)');
+    const title = await page.locator( goodsPage.goodsTileTitle ).textContent();
+    await expect(title.trim()).toStrictEqual( testStrings.HP_17_cp0007ua );
   });

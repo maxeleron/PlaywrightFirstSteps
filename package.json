@@ -7,9 +7,16 @@
     "test": "tests"
   },
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "@playwright/test": "^1.14.1"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "REGRESSION": "playwright test",
+    "textAssertion": "playwright test 1.textAssertion.spec.js",
+    "colorAssertion": "playwright test 2.colorAssertion.spec.js",
+    "searchTest": "playwright test 3.searchTest.spec.js",
+    "sortTest": "playwright test 4.sortTest.spec.js",
+    "shopPathTest": "playwright test 5.shopPathTest.spec.js"
   },
   "repository": {
     "type": "git",

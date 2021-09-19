@@ -1,9 +1,19 @@
 const { test, expect } = require('@playwright/test');
+const { MainPage } = require('../models/MainPage');
+const { TestStrings } = require('../testData/TestStrings');
 
-// first test
 // Assertion for text
-test('first test', async ({ page }) => {
-    await page.goto('https://rozetka.com.ua/');
-    const title = await page.locator('#fat-menu').textContent();
-    await expect(title.trim()).toStrictEqual('Каталог');
+test('Catalogue button has correct text', async ({ page }) => {
+    // Page Object variables
+    const mainPage = new MainPage(page);
+    const testStrings = new TestStrings();
+
+    // Open new page - rozetka.com.ua
+    await mainPage.open();
+
+    // Getting text content from Catalogue batton to title variable
+    const buttonText = await page.locator( mainPage.catalogueButton ).textContent();
+
+    // Assertion to check text
+    await expect( buttonText.trim() ).toStrictEqual( testStrings.catalogueButtonText );
   });

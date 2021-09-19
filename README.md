@@ -1,17 +1,18 @@
 # PlaywrightFirstSteps
+This project is created as an assessment aim (to claim AQA J3)
 
+## Installation of the project
+### Installation of Playwright
+__npm i -D @playwright/test__
+### install supported browsers
+__npx playwright install__
 
-# Installation of Playwright
-npm i -D @playwright/test
-# install supported browsers
-npx playwright install
+# Different runs (you can also find them in package.json scripts)
+Write "npm run ..." and one of the commands below to run full regression or single test.
 
-# Different runs
-npx playwright test
-npx playwright test --headed
-npx playwright test --browser=firefox
-npx playwright test --browser=all
-
-
-npx playwright test 'second test' --headed
-npx playwright test colorAssertion.spec.js --headed
+    "REGRESSION": "playwright test",
+    "textAssertion": "playwright test 1.textAssertion.spec.js",
+    "colorAssertion": "playwright test 2.colorAssertion.spec.js",
+    "searchTest": "playwright test 3.searchTest.spec.js",
+    "sortTest": "playwright test 4.sortTest.spec.js",
+    "shopPathTest": "playwright test 5.shopPathTest.spec.js"
