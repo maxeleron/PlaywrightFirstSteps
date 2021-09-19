@@ -1,4 +1,3 @@
-/** @type {import('@playwright/test').PlaywrightTestConfig} */
 const config = {
   workers: 1,
   retries: 2,

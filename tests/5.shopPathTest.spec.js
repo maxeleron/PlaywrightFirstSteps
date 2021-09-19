@@ -1,25 +1,33 @@
 const { test, expect } = require('@playwright/test');
+const { MainPage } = require('../models/MainPage');
+const { SearchPage } = require('../models/SearchPage');
+const { GoodsPage } = require('../models/GoodsPage');
+const { ShoppingPage } = require('../models/ShoppingPage');
+const { TestStrings } = require('../testData/TestStrings');
 
-  test('User can perform a purchase', async ({ page }) => {
-    // Go to main page
-    await page.goto('https://rozetka.com.ua/');
+test('User can perform a purchase', async ({ page }) => {
+    // Page Object variables
+    const mainPage = new MainPage(page);
+    const searchPage = new SearchPage(page);
+    const goodsPage = new GoodsPage(page);
+    const shoppingPage = new ShoppingPage(page);
+    const testStrings = new TestStrings();
 
-    await page.fill('rz-header input', 'Наушники JBL Tune 500 черный');
+    // Open new page - rozetka.com.ua
+    await mainPage.open();
 
-    // Click "Search" ("Найти") button
-    await page.click('rz-header form > button');
-
-    // Wait for tiles appear after search
-    await page.waitForSelector('.goods-tile');
+    // Perform search
+    await searchPage.search( testStrings.JBL_Tune500, goodsPage.goodsTileTitle );
 
     // Click first headphones from search results
-    await page.click('.goods-tile');
+    await page.click( goodsPage.goodsTileTitle );
 
     // Click Buy button
-    await page.click('.product__buy .buy-button');
+    await page.click( shoppingPage.buyButton );
 
-    const shoppingCartLocator = page.locator('text=Корзина');
-    const purchaseButtonLocator = page.locator('text=" Оформить заказ "');
+    // Getting items to variables before assertion
+    const shoppingCartLocator = page.locator( shoppingPage.shoppingCart );
+    const purchaseButtonLocator = page.locator( shoppingPage.purchaseButton );
 
     // Assertion to check that sorting applied correctly
     await expect(shoppingCartLocator).toBeVisible();

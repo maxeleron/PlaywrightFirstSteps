@@ -1,11 +1,21 @@
 const { test, expect } = require('@playwright/test');
+const { MainPage } = require('../models/MainPage');
+const { GoodsPage } = require('../models/GoodsPage');
+const { TestSort } = require('../testData/TestSort');
+const { TestStrings } = require('../testData/TestStrings');
 
 test('User can sort elements', async ({ page }) => {
-    // Go to main page
-    await page.goto('https://rozetka.com.ua/');
+    // Page Object variables
+    const mainPage = new MainPage(page);
+    const goodsPage = new GoodsPage(page);
+    const testSort = new TestSort();
+    const testStrings = new TestStrings();
+
+    // Open new page - rozetka.com.ua
+    await mainPage.open();
 
     // Open Catalogue ("Каталог")
-    await page.click('#fat-menu');
+    await page.click( mainPage.catalogueButton );
 
     // The user clicks 'Ноутбуки и компьютеры' section
     await page.click('text=Ноутбуки и компьютеры');
@@ -13,28 +23,28 @@ test('User can sort elements', async ({ page }) => {
     // Select Laptop category
     await page.click('[title="Ноутбуки"]');
 
-    // Sort by brand (Dell)
-    await page.click('[for="Lenovo"]');
+    // Sort by brand Lenovo
+    await goodsPage.sortGoods( testSort.lenovo );
 
     // Sort by CPU: AMD Ryzen 5
-    await page.click('[for="AMD Ryzen 5"]');
+    await goodsPage.sortGoods( testSort.amdRyzen5 );
 
-    // await page.waitForSelector('[for="16 - 24 ГБ"]');
-    await page.click('[for="16 - 24 ГБ"]');
+    // Sort by RAM: 16-24gb
+    await goodsPage.sortGoods( testSort.ram16_24gb );
 
-    // await page.waitForSelector('[for="256 ГБ"]');
-    await page.click('[for="256 ГБ"]');
+    // Sort by SSD: 256gb
+    await goodsPage.sortGoods( testSort.ssd256gb );
 
     // Select only avaliable laptops
-    await page.click('[for="Есть в наличии"]');
+    await goodsPage.sortGoods( testSort.avaliable );
 
     // Select 16"-17" diagonal
-    await page.click(`[for='16"-17"']`);
+    await goodsPage.sortGoods( testSort.display16_17 );
 
     // Wait for sort applied
-    await page.waitForSelector('.goods-tile__heading');
+    await page.waitForSelector( goodsPage.goodsTileTitle );
 
     // Assertion to check that sorting applied correctly
-    const title = await page.locator('.goods-tile__title').textContent();
-    await expect(title.trim()).toStrictEqual('Ноутбук HP Laptop 17-cp0007ua (423L1EA) Black');
+    const title = await page.locator( goodsPage.goodsTileTitle ).textContent();
+    await expect(title.trim()).toStrictEqual( testStrings.HP_17_cp0007ua );
   });
