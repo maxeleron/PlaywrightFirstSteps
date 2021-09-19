@@ -9,7 +9,12 @@
   "dependencies": {},
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "REGRESSION": "playwright test",
+    "textAssertion": "playwright test 1.textAssertion.spec.js --headed",
+    "colorAssertion": "playwright test 2.colorAssertion.spec.js --headed",
+    "searchTest": "playwright test 3.searchTest.spec.js --headed",
+    "sortTest": "playwright test 4.sortTest.spec.js --headed",
+    "shopPathTest": "playwright test 5.shopPathTest.spec.js --headed"
   },
   "repository": {
     "type": "git",
